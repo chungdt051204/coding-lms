@@ -4,7 +4,7 @@ A full-stack Learning Management System (LMS) for online programming courses. Th
 
 ## Features
 
-### Learner
+### Student
 
 - Register and log in with email/password or Google OAuth.
 - Browse and search approved, visible programming courses.
