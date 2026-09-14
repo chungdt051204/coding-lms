@@ -41,6 +41,7 @@ const CourseDetail = () => {
   const isAdmin = me?.role_id?.role === "admin";
   const isInstructor = me?.role_id?.role === "instructor";
   const { id } = useParams();
+  const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(null);
   const [ratings, setRatings] = useState([]);
   const [myRating, setMyRating] = useState(null);
@@ -103,6 +104,8 @@ const CourseDetail = () => {
           const status = error.status;
           const message = error.data.message;
           console.log(status, message);
+        } finally {
+          setLoading(false);
         }
       };
       getCourseById();
@@ -263,8 +266,8 @@ const CourseDetail = () => {
   return (
     <>
       <Navbar />
-      {!course ? (
-        <div className="py-24  h-[100vh] text-center">
+      {loading ? (
+        <div className="my-[50vh] h-[100vh] text-center">
           <Ring2
             size="40"
             stroke="5"

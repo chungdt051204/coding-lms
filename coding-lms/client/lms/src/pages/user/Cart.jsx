@@ -158,7 +158,7 @@ const Cart = () => {
     <>
       <Navbar />
       {isLoading ? (
-        <div className="py-24 h-[100vh] text-center">
+        <div className="my-[50vh] h-[100vh] text-center">
           <Ring2
             size="40"
             stroke="5"
@@ -344,7 +344,7 @@ const Cart = () => {
         </div>
       )}
       <dialog
-        className="w-full lg:w-[45%] mx-auto mt-6 p-6 rounded-[16px]"
+        className="w-full md:w-[75%] lg:w-[45%] mx-auto mt-6 p-6 rounded-[16px]"
         ref={dialogRef}
       >
         <form onSubmit={handleCheckout} className="flex flex-col gap-y-4">
@@ -366,7 +366,7 @@ const Cart = () => {
           <div className="flex flex-col gap-y-2 border border-gray-300 rounded-[16px] p-4 bg-gray-50">
             <div className="flex gap-x-3 items-center">
               <FiUser className="text-title-lg text-nav-muted" />
-              <div className="flex flex-col text-title-sm">
+              <div className="w-[80%] flex flex-col text-title-sm">
                 <p className="text-nav-muted">Họ tên</p>
                 <p className="text-surface-nav font-medium wrap-break-word">
                   {me?.full_name || ""}
@@ -374,10 +374,10 @@ const Cart = () => {
               </div>
             </div>
             <div className="flex gap-x-3 items-center">
-              <MdOutlineEmail className="text-title-lg text-nav-muted" />
-              <div className="flex flex-col text-title-sm">
+              <MdOutlineEmail className="shrink-0 text-title-lg text-nav-muted" />
+              <div className="w-[80%] flex flex-col text-title-sm">
                 <p className="text-nav-muted">Email</p>
-                <p className="text-surface-nav font-medium wrap-break-word">
+                <p className="text-surface-nav font-medium wrap-break-word ">
                   {me?.email || ""}
                 </p>
               </div>
@@ -391,7 +391,7 @@ const Cart = () => {
               {cartItemsSelected?.map((value) => {
                 return (
                   <div
-                    className="flex justify-between items-center py-3 px-4 rounded-[16px] bg-gray-50"
+                    className="flex flex-wrap gap-4 md:flex-row md:justify-between md:items-center py-3 px-4 rounded-[16px] bg-gray-50"
                     key={value?._id}
                   >
                     <div className="flex gap-x-4">

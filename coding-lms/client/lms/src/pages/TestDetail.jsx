@@ -24,7 +24,9 @@ const TestDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { item: me, isLoading } = useSelector((state) => state.me);
-  const { items: enrollments } = useSelector((state) => state.enrollments);
+  const { items: enrollments, loading } = useSelector(
+    (state) => state.enrollments
+  );
   const isAdmin = me?.role_id?.role === "admin";
   const isInstructor = me?.role_id?.role === "instructor";
   const accessedTest = enrollments?.arrayEnrollment?.some(
@@ -55,14 +57,14 @@ const TestDetail = () => {
     }
     if (
       !isLoading &&
-      (me?.role_id?.role == null || !accessedTest) &&
-      isAdmin &&
-      isInstructor
+      me?.role_id?.role === "user" &&
+      !loading &&
+      !accessedTest
     ) {
       navigate("/");
       return;
     }
-  }, [navigate, isLoading, accessedTest, isAdmin, isInstructor, me]);
+  }, [navigate, isLoading, accessedTest, me, loading]);
 
   useEffect(() => {
     if (me?.role_id?.role === "user") {
@@ -192,8 +194,8 @@ const TestDetail = () => {
   return (
     <>
       <Navbar />
-      {isLoading ? (
-        <div className="py-24 h-[100vh] text-center">
+      {!test || questions?.length == 0 ? (
+        <div className="my-[50vh] h-[100vh] text-center">
           <Ring2
             size="40"
             stroke="5"

@@ -26,6 +26,7 @@ const LessonDetail = () => {
     (state) => state.enrollments
   );
   const { courseId, id } = useParams();
+  const [lessonLoading, setLessonLoading] = useState(true);
   const [lessons, setLessons] = useState([]);
   const [lesson, setLesson] = useState(null);
   const [lessonProgresses, setLessonProgresses] = useState([]);
@@ -48,15 +49,15 @@ const LessonDetail = () => {
       return;
     }
     if (
+      !loading &&
+      me?.role_id?.role === "user" &&
       !isLoading &&
-      (me?.role_id?.role == null || !enrolledCourse) &&
-      !isAdmin &&
-      !isInstructor
+      !enrolledCourse
     ) {
       navigate("/");
       return;
     }
-  }, [enrolledCourse, navigate, isLoading, me, isAdmin, isInstructor]);
+  }, [enrolledCourse, navigate, loading, isLoading, me]);
   useEffect(() => {
     if (!loading && !isAdmin && !isInstructor) {
       const getEnrollmentsByUser = async () => {
@@ -102,6 +103,8 @@ const LessonDetail = () => {
         const status = error.status;
         const message = error.data.message;
         console.log(status, message);
+      } finally {
+        setLessonLoading(false);
       }
     };
     getLessonById();
@@ -182,8 +185,8 @@ const LessonDetail = () => {
   return (
     <>
       <Navbar />
-      {loading ? (
-        <div className="py-24 h-[100vh] text-center">
+      {lessonLoading ? (
+        <div className="my-[50vh] h-[100vh] text-center">
           <Ring2
             size="40"
             stroke="5"

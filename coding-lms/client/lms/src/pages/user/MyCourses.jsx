@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { enrollmentService } from "../../services/enrollmentService";
@@ -22,6 +22,7 @@ const MyCourses = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const { item: me, isLoading } = useSelector((state) => state.me);
+  const [loading, setLoading] = useState(true);
   const { items: enrollments } = useSelector((state) => state.enrollments);
   useEffect(() => {
     if (!sessionStorage.getItem("token")) {
@@ -53,6 +54,8 @@ const MyCourses = () => {
         const status = error.status;
         const message = error.data.message;
         console.log(status, message);
+      } finally {
+        setLoading(false);
       }
     };
     getEnrollmentsByUser();
@@ -61,8 +64,8 @@ const MyCourses = () => {
   return (
     <>
       <Navbar />
-      {isLoading ? (
-        <div className="py-24 h-[100vh] text-center">
+      {loading ? (
+        <div className="my-[50vh] h-[100vh] text-center">
           <Ring2
             size="40"
             stroke="5"

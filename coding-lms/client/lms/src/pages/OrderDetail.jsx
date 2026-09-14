@@ -18,6 +18,7 @@ const OrderDetail = () => {
   const { item: me, isLoading } = useSelector((state) => state.me);
   const currentStatus = me?.role_id?.role;
   const [order, setOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
   useEffect(() => {
     if (!sessionStorage.getItem("token")) {
@@ -43,6 +44,8 @@ const OrderDetail = () => {
           const status = error.status;
           const message = error.data.message;
           console.log(status, message);
+        } finally {
+          setLoading(false);
         }
       };
       getOrderById();
@@ -63,8 +66,8 @@ const OrderDetail = () => {
   return (
     <>
       <Navbar />
-      {isLoading ? (
-        <div className="py-24 h-[100vh] text-center">
+      {loading ? (
+        <div className="my-[50vh] h-[100vh] text-center">
           <Ring2
             size="40"
             stroke="5"
@@ -305,7 +308,7 @@ const OrderDetail = () => {
             order?.item?.payment_status === "PARTIAL_PAID" && (
               <button
                 onClick={handleProcessPayment}
-                className="w-full sm:w-auto py-3 px-8 self-center xl:self-end bg-surface-nav text-title-sm md:text-title-lg text-surface-white font-medium rounded-[8px] transition-transform duration-300 hover:cursor-pointer hover:opacity-90 active:scale-[0.99]"
+                className="w-full sm:w-auto py-3 px-8 self-center md:self-end bg-surface-nav text-title-sm md:text-title-lg text-surface-white font-medium rounded-[8px] transition-transform duration-300 hover:cursor-pointer hover:opacity-90 active:scale-[0.99]"
               >
                 Thanh toán nốt số tiền còn lại
               </button>

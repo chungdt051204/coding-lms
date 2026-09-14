@@ -85,7 +85,7 @@ const Notifications = () => {
     <>
       <Navbar />
       {isLoading ? (
-        <div className="py-24 h-[100vh] text-center">
+        <div className="my-[50vh] h-[100vh] text-center">
           <Ring2
             size="40"
             stroke="5"
