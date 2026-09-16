@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { socket } from "../../socket";
@@ -18,6 +18,9 @@ const Login = () => {
   const [error, setError] = useState({ errorEmail: "", errorPassword: "" });
   const [errorLogin, setErrorLogin] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
   const handleLogin = async (e) => {
     e.preventDefault();
     const data = { email: formData.email, password: formData.password };
