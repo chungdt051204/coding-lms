@@ -208,7 +208,7 @@ const LessonDetail = () => {
           <div className="flex flex-col gap-y-2 w-full lg:w-[60%] relative">
             <dialog
               ref={dialogRef}
-              className="absolute w-[90%] md:w-[50%] lg:w-[40%] top-[250px] left-[20px] md:left-[120px] p-4 rounded-[8px] shadow-lg"
+              className="absolute w-[90%] md:w-[75%] lg:w-[45%] top-[200px] md:top-[220px] left-[20px] md:left-[100px] p-4 rounded-[8px] shadow-lg"
             >
               <div className="flex flex-col gap-y-4 ">
                 <div className="flex flex-col items-center">
