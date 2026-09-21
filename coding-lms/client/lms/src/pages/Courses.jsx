@@ -1,8 +1,7 @@
 import { useSearchParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { courseService } from "../services/courseService";
-import { setCourses } from "../stores/features/courseSlice";
 import { IoSearch } from "react-icons/io5";
 import Select from "react-select";
 import Navbar from "../components/Navbar";
@@ -13,9 +12,9 @@ import Footer from "../components/Footer";
 const Courses = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const page = searchParams.get("page");
-  const dispatch = useDispatch();
   const { items: categories } = useSelector((state) => state.categories);
-  const { items: courses, isLoading } = useSelector((state) => state.courses);
+  const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [searchValue, setSearchValue] = useState("");
   let categoryOptions = [
     {
@@ -87,15 +86,17 @@ const Courses = () => {
           params: params.toString(),
         });
         console.log(result.data);
-        dispatch(setCourses(result.data));
+        setCourses(result?.data);
       } catch (error) {
         const status = error.status;
         const message = error.message;
         console.log(status, message);
+      } finally {
+        setIsLoading(false);
       }
     };
     getApprovedCourses();
-  }, [dispatch, searchParams, page, category, level, option]);
+  }, [searchParams, page, category, level, option]);
   const handleSearch = () => {
     if (!searchValue?.trim()) {
       setError("Vui lòng nhập từ khóa tìm kiếm!");
