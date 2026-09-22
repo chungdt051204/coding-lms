@@ -10,8 +10,4 @@ export const enrollmentService = {
     const response = await axiosClient.get(`/user/enrollments?${params}`);
     return response;
   },
-  getAllEnrollments: async () => {
-    const response = await axiosClient.get("/enrollments");
-    return response;
-  },
 };

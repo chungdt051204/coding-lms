@@ -31,7 +31,6 @@ import { conversationRouter } from "./routers/conversationRouter.js";
 import { aiRouter } from "./routers/aiRouter.js";
 import { MessageService } from "./services/messageService.js";
 import { NotificationService } from "./services/notificationService.js";
-import { UserService } from "./services/userService.js";
 
 const server = createServer(app);
 export const io = new Server(server, {

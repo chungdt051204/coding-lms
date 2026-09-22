@@ -57,10 +57,6 @@ export class EnrollmentService {
     }
     return enrollment;
   };
-  getAllEnrollments = async () => {
-    const enrollments = await enrollmentEntity.find();
-    return enrollments || [];
-  };
   updateEnrollment = async ({ enrollmentId, progressPercent }) => {
     const enrollment = await enrollmentEntity.findOne({ _id: enrollmentId });
     if (!enrollment) {
