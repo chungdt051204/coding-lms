@@ -43,10 +43,13 @@ const Conversations = ({ me }) => {
     return `${Math.floor(secondsDifference / 2592000)} tháng trước`;
   };
   useEffect(() => {
-    socket.on("new-message", (data) => {
+    const handleNewMessage = () => {
       setRefresh((prev) => prev + 1);
-      console.log(data);
-    });
+    };
+    socket.on("new-message", handleNewMessage);
+    return () => {
+      socket.off("new-message", handleNewMessage);
+    };
   }, []);
   useEffect(() => {
     const getConversationsByInstructor = async () => {

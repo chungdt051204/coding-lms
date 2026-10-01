@@ -1,7 +1,22 @@
 import { Outlet } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
+import { useEffect } from "react";
+import { createNotification } from "../../stores/features/notificationSlice";
+import { socket } from "../../../socket";
+
 export const InstructorPage = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const handleCourseReviewResult = (data) => {
+      dispatch(createNotification(data));
+    };
+    socket.on("course-review-result", handleCourseReviewResult);
+    return () => {
+      socket.off("course-review-result", handleCourseReviewResult);
+    };
+  });
   return (
     <>
       <Navbar />

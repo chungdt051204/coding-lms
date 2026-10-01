@@ -67,9 +67,13 @@ const InstructorCourses = () => {
   const [isUpdateStatus, setIsUpdateStatus] = useState(false);
   const confirmDialog = useRef();
   useEffect(() => {
-    socket.on("course-review-result", async () => {
+    const handleRefresh = () => {
       setRefresh((prev) => prev + 1);
-    });
+    };
+    socket.on("course-review-result", handleRefresh);
+    return () => {
+      socket.off("course-review-result", handleRefresh);
+    };
   }, []);
   useEffect(() => {
     const getCoursesByInstructor = async () => {
@@ -119,7 +123,6 @@ const InstructorCourses = () => {
         courseId: course?._id,
         status: statusCourse,
       });
-      console.log(result);
       toast.success(
         result.message || "Đăng tải/Hủy đăng tải khóa học thành công"
       );
@@ -217,12 +220,12 @@ const InstructorCourses = () => {
                   <table className="w-full border-separate border-spacing-0 overflow-hidden border border-gray-300 rounded-[16px] mt-6">
                     <thead>
                       <tr className="flex items-center justify-between text-surface-nav font-medium border-b border-gray-200">
-                        <td className="w-[35%] p-2">Khóa học</td>
+                        <td className="w-[30%] p-2">Khóa học</td>
                         <td className="w-[10%]">Trạng thái</td>
                         <td className="w-[10%]">Học viên</td>
-                        <td className="w-[10%]">Doanh thu</td>
+                        <td className="w-[12%]">Doanh thu</td>
                         <td className="w-[10%]">Đánh giá</td>
-                        <td className="w-[22%] p-2 text-right">Thao tác</td>
+                        <td className="w-[25%] p-2 text-right">Thao tác</td>
                       </tr>
                     </thead>
                     <tbody>
@@ -233,7 +236,7 @@ const InstructorCourses = () => {
                               className="flex justify-between items-center border-b border-gray-200 hover:bg-surface-bg last:border-b-0"
                               key={value.course?._id}
                             >
-                              <td className="flex items-center gap-x-2 w-[35%] p-2">
+                              <td className="flex items-center gap-x-2 w-[30%] p-2">
                                 <img
                                   className="w-[50px] h-[50px] object-cover rounded-[8px] shrink-0"
                                   src={value.course?.image_url}
@@ -267,7 +270,7 @@ const InstructorCourses = () => {
                                 <RxPeople />
                                 <p>{value.numberEnrollment}</p>
                               </td>
-                              <td className="text-title-sm text-surface-nav font-medium w-[10%]">
+                              <td className="text-title-sm text-surface-nav font-medium w-[12%]">
                                 {value.revenue > 0
                                   ? format.formatPrice({ price: value.revenue })
                                   : 0}
@@ -281,7 +284,7 @@ const InstructorCourses = () => {
                                     : "0.0"}
                                 </p>
                               </td>
-                              <td className="flex justify-end gap-x-2 items-center pe-2 w-[22%]">
+                              <td className="flex justify-end gap-x-2 items-center pe-2 w-[25%]">
                                 <div className="flex gap-x-1">
                                   {(value.course?.status === "draft" ||
                                     value.course?.status === "rejected") && (

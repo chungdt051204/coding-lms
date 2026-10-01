@@ -28,6 +28,7 @@ export class EnrollmentService {
       page: params?.page,
       limit: params?.limit,
       populate: ["course_id"],
+      sort: { createdAt: -1 },
     };
     let query = { user_id: userId };
     const enrollments = await enrollmentEntity.paginate(query, options);

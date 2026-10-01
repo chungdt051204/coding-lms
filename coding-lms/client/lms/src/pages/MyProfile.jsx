@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { validateForm } from "../../helper/validateForm";
 import { userService } from "../services/userService";
 import { toast } from "react-toastify";
@@ -17,11 +18,12 @@ import { FaGraduationCap } from "react-icons/fa";
 import { IoCloudUploadOutline } from "react-icons/io5";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import { setMe } from "../stores/features/meSlice";
 
 const MyProfile = () => {
+  const dispatch = useDispatch();
+  const { item: me, isLoading } = useSelector((state) => state.me);
   const navigate = useNavigate();
-  const [me, setMe] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [accountInfo, setAccountInfo] = useState({
     fullName: "",
     phone: "",
@@ -52,7 +54,6 @@ const MyProfile = () => {
     errorBackIdCard: "",
     errorDegreeCertificate: "",
   });
-  const [refresh, setRefresh] = useState(0);
   const handleValidateFile = ({ e, errorField }) => {
     const allowedTypes = ["jpg", "png", "jpeg"];
     const image = e.target.files[0];
@@ -86,22 +87,6 @@ const MyProfile = () => {
   }, [isLoading, me, navigate]);
 
   useEffect(() => {
-    const getMe = async () => {
-      try {
-        const result = await userService.getMe();
-        console.log(result.data);
-        setMe(result.data);
-      } catch (error) {
-        const status = error.status;
-        const message = error.data.message;
-        console.log(status, message);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getMe();
-  }, [refresh]);
-  useEffect(() => {
     if (me) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setAccountInfo((prev) => ({
@@ -126,8 +111,8 @@ const MyProfile = () => {
     formData.append("avatar", accountInfo.avatar);
     try {
       const result = await userService.updateAvatar({ avatar: formData });
+      dispatch(setMe(result?.data));
       toast.success(result?.message || "Cập nhật ảnh đại diện thành công");
-      setRefresh((prev) => prev + 1);
     } catch (error) {
       const status = error.status;
       const message = error.data.message;
@@ -142,8 +127,8 @@ const MyProfile = () => {
     if (!validateForm.validateUserForm({ formData: data, setError })) return;
     try {
       const result = await userService.updateProfile({ data });
+      dispatch(setMe(result?.data));
       toast.success(result?.message || "Cập nhật thông tin thành công");
-      setRefresh((prev) => prev + 1);
     } catch (error) {
       const status = error.status;
       const message = error.data.message;
@@ -163,8 +148,8 @@ const MyProfile = () => {
       const result = await userService.changePassword({
         password: formData,
       });
+      dispatch(setMe(result?.data));
       toast.success(result?.message || "Thay đổi mật khẩu thành công");
-      setRefresh((prev) => prev + 1);
       navigate("/login");
     } catch (error) {
       const status = error.status;
@@ -197,8 +182,8 @@ const MyProfile = () => {
       const result = await userService.sendRequestVerification({
         images: formData,
       });
+      dispatch(setMe(result?.data));
       toast.success(result?.message || "Gửi yêu cầu xác thực thành công");
-      setRefresh((prev) => prev + 1);
     } catch (error) {
       const status = error.status;
       const message = error.data.message;
@@ -209,10 +194,7 @@ const MyProfile = () => {
     try {
       const result = await userService.cancelRequestVerification();
       toast.success(result?.message || "Hủy yêu cầu xác thực thành công");
-      setFrontIdCard(null);
-      setBackIdCard(null);
-      setDegreeCertificate(null);
-      setRefresh((prev) => prev + 1);
+      dispatch(setMe(result?.data));
     } catch (error) {
       const status = error.status;
       const message = error.data.message;

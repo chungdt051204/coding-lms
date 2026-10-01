@@ -79,7 +79,7 @@ io.on("connection", (socket) => {
   socket.on("send-message", async (data) => {
     const result = await new MessageService().postMessage({ data });
     socket.join(result?.conversationId.toString());
-    io.to(data.instructorId).emit("new-message", result); //Gửi đến room Instructor
+    io.to(data.instructorId).emit("new-message"); //Gửi đến room Instructor
     io.to(result?.conversationId.toString()).emit("received-message", result); // Gửi đến room Conversation
   });
   socket.on("post-comment", async (data) => {

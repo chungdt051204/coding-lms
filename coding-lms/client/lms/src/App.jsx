@@ -12,7 +12,10 @@ import { categoryService } from "./services/categoryService";
 import { cartService } from "./services/cartService";
 import { setCart } from "./stores/features/cartSlice";
 import { notificationService } from "./services/notificationService";
-import { setNotifications } from "./stores/features/notificationSlice";
+import {
+  createNotification,
+  setNotifications,
+} from "./stores/features/notificationSlice";
 import { socket } from "../socket";
 import LandingPage from "./pages/LandingPage";
 import Login from "./pages/Login";
@@ -56,34 +59,32 @@ function App() {
   const [searchParams, setSearchParams] = useSearchParams();
   const token = searchParams.get("token");
   const [refresh, setRefresh] = useState(0);
+
   useEffect(() => {
-    socket.on("change-status", () => {
+    const handleConnect = () => {
+      console.log("Đã kết nối");
+    };
+    const handleForceLogout = () => {
+      sessionStorage.removeItem("token");
+      setRefresh((prev) => prev + 1);
+    };
+    socket.on("connect", handleConnect);
+    socket.on("force-logout", handleForceLogout);
+    return () => {
+      socket.off("force-logout", handleForceLogout);
+    };
+  }, []);
+  useEffect(() => {
+    const handleChangeStatus = () => {
       setRefresh((prev) => prev + 1);
       sessionStorage.removeItem("token");
       navigate("/login");
-    });
+    };
+    socket.on("change-status", handleChangeStatus);
+    return () => {
+      socket.off("change-status", handleChangeStatus);
+    };
   }, [navigate]);
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("Đã kết nối");
-    });
-    socket.on("force-logout", () => {
-      sessionStorage.removeItem("token");
-      setRefresh((prev) => prev + 1);
-    });
-    socket.on("course-review", () => {
-      setRefresh((prev) => prev + 1);
-    });
-    socket.on("course-review-result", () => {
-      setRefresh((prev) => prev + 1);
-    });
-    socket.on("account-review", () => {
-      setRefresh((prev) => prev + 1);
-    });
-    socket.on("account-review-result", () => {
-      setRefresh((prev) => prev + 1);
-    });
-  }, []);
   useEffect(() => {
     const getAllRoles = async () => {
       const result = await roleService.getAllRoles();
@@ -158,8 +159,29 @@ function App() {
     if (me?.role_id?.role === "admin") socket.emit("join-admin", me?._id);
     if (me?.role_id?.role === "instructor")
       socket.emit("join-instructor", me?._id);
+    if (me?.role_id?.role == "user") socket.emit("join-user", me?._id);
   }, [me]);
-
+  useEffect(() => {
+    if (me?.role_id?.role === "instructor") {
+      const handleAccountReviewResult = (data) => {
+        dispatch(createNotification(data?.newNotification));
+        dispatch(setMe(data?.result));
+      };
+      socket.on("account-review-result", handleAccountReviewResult);
+      return () => {
+        socket.off("account-review-result", handleAccountReviewResult);
+      };
+    }
+    if (me?.role_id?.role === "user") {
+      const handleCreateNewNotification = (data) => {
+        dispatch(createNotification(data));
+      };
+      socket.on("new-notification", handleCreateNewNotification);
+      return () => {
+        socket.off("new-notification", handleCreateNewNotification);
+      };
+    }
+  }, [dispatch, me]);
   return (
     <>
       <Routes>

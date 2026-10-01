@@ -23,18 +23,20 @@ const ConversationDetail = ({
   const [messages, setMessages] = useState([]);
   const [chatMessage, setChatMessage] = useState("");
   useEffect(() => {
-    socket.on("received-message", (data) => {
-      console.log(data);
+    const handleReceivedMessage = (data) => {
       setMessages((prev) => [...prev, data?.newMessage]);
       setChatMessage("");
-    });
+    };
+    socket.on("received-message", handleReceivedMessage);
+    return () => {
+      socket.off("received-message", handleReceivedMessage);
+    };
   }, []);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     if (conversationInfo?.messages) setMessages(conversationInfo?.messages);
   }, [conversationInfo?.messages]);
   useEffect(() => {
-    console.log(conversationInfo?.conversationId);
     if (conversationInfo?.conversationId) {
       socket.emit("join-conversation", conversationInfo?.conversationId); //Join vào cuộc hội thoại
       const readAllMessagesByConversation = async () => {

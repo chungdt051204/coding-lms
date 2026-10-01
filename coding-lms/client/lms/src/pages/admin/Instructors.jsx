@@ -47,9 +47,13 @@ const Instructors = () => {
   const verifiedStatus = isApproved ? "VERIFIED" : "REJECTED";
   const rejectDialog = useRef();
   useEffect(() => {
-    socket.on("account-review", () => {
+    const handleRefresh = () => {
       setRefresh((prev) => prev + 1);
-    });
+    };
+    socket.on("account-review", handleRefresh);
+    return () => {
+      socket.off("account-review", handleRefresh);
+    };
   }, []);
   useEffect(() => {
     const getInstructors = async () => {

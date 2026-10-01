@@ -1,8 +1,7 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { courseService } from "../services/courseService";
-import { setCourses } from "../stores/features/courseSlice";
 import { Ring2 } from "ldrs/react";
 import "ldrs/react/Ring2.css";
 import { FaArrowRight } from "react-icons/fa6";
@@ -19,10 +18,10 @@ import ChatBotAI from "../components/ChatBotAI";
 const LandingPage = () => {
   const navigate = useNavigate();
   const { searchParams } = useSearchParams();
-  const dispatch = useDispatch();
   const { item: me } = useSelector((state) => state.me);
-  const { items: courses, isLoading } = useSelector((state) => state.courses);
   const categories = useSelector((state) => state.categories.items);
+  const [courses, setCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const items = [
     {
       icon: <IoBookOutline className="text-brand-blue mx-auto" />,
@@ -60,15 +59,17 @@ const LandingPage = () => {
           params: params.toString(),
         });
         console.log(result.data);
-        dispatch(setCourses(result.data));
+        setCourses(result.data);
       } catch (error) {
         const status = error.status;
         const message = error.message;
         console.log(status, message);
+      } finally {
+        setIsLoading(false);
       }
     };
     getApprovedCourses();
-  }, [dispatch, searchParams]);
+  }, [searchParams]);
 
   return (
     <>

@@ -1,7 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setCourses } from "../../stores/features/courseSlice";
 import { courseService } from "../../services/courseService";
 import { testService } from "../../services/testService";
 import { questionService } from "../../services/questionService";
@@ -15,8 +13,7 @@ const TestEditor = () => {
   const { id } = useParams();
   const duration_minutes = [15, 20, 30, 45, 60];
   const pass_scores = [50, 60, 70, 80, 90];
-  const dispatch = useDispatch();
-  const courses = useSelector((state) => state.courses.items);
+  const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [testInfo, setTestInfo] = useState({
     testName: "",
@@ -125,8 +122,8 @@ const TestEditor = () => {
         const result = await courseService.getCoursesByInstructor({
           params: "",
         });
-        console.log(result);
-        dispatch(setCourses(result.data));
+        console.log(result.data);
+        setCourses(result.data);
       } catch (error) {
         const status = error.status;
         const message = error.data.message;
@@ -134,7 +131,7 @@ const TestEditor = () => {
       }
     };
     getCoursesByInstructor();
-  }, [dispatch]);
+  }, []);
   const handleSave = async (e) => {
     e.preventDefault();
     const testNameRegex = /^[\p{L}\p{N}\s&.+\-_()#/,"';:!?%*]+$/u;

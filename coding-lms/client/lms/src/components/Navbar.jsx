@@ -5,8 +5,6 @@ import { authService } from "../services/authService";
 import { setIsLogin } from "../stores/features/authSlice";
 import { setMe } from "../stores/features/meSlice";
 import { courseService } from "../services/courseService";
-import { socket } from "../../socket";
-import { createNotification } from "../stores/features/notificationSlice";
 import { toast } from "react-toastify";
 import { setEnrollments } from "../stores/features/enrollmentSlice";
 import { format } from "../../helper/format";
@@ -100,14 +98,7 @@ export const Navbar = () => {
       },
     ],
   };
-  useEffect(() => {
-    if (me && currentRole == "user") {
-      socket.emit("join-user", me?._id);
-      socket.on("new-notification", (data) => {
-        dispatch(createNotification(data));
-      });
-    }
-  }, [currentRole, me, dispatch]);
+
   useEffect(() => {
     const getApprovedCourses = async () => {
       try {
@@ -320,7 +311,7 @@ export const Navbar = () => {
                 onClick={() => navigate("/notifications")}
               >
                 <IoMdNotificationsOutline className="text-headline-md" />
-                {notifications?.filter((value) => !value.is_read)?.length >
+                {notifications?.filter((value) => !value?.is_read)?.length >
                   0 && (
                   <div className="absolute -top-1 -right-2 bg-red-500 min-w-[20px] h-[20px] px-1 rounded-full flex items-center justify-center">
                     <p className="text-title-sm text-surface-white font-medium leading-none">

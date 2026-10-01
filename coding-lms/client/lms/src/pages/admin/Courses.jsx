@@ -53,10 +53,14 @@ const AdminCourses = () => {
   const [reason, setReason] = useState("");
   const rejectDialog = useRef();
   useEffect(() => {
-    socket.on("course-review", async () => {
+    const handleRefresh = () => {
       setRefresh((prev) => prev + 1);
-    });
-  }, []);
+    };
+    socket.on("course-review", handleRefresh);
+    return () => {
+      socket.off("course-review", handleRefresh);
+    };
+  });
   useEffect(() => {
     const getCoursesByAdmin = async () => {
       try {
