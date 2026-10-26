@@ -22,43 +22,43 @@ userRouter.get(
 userRouter.get(
   `${prefix}/admin/instructors`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new UserController().getInstructors
 );
 userRouter.get(
   `${prefix}/admin/users`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new UserController().getUsers
 );
 userRouter.get(
   `${prefix}/admin/instructor/:id`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new UserController().getInstructorById
 );
 userRouter.get(
   `${prefix}/admin/user/:id`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new UserController().getUserById
 );
 userRouter.get(
   `${prefix}/instructor/students`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new UserController().getStudentsByInstructor
 );
 userRouter.get(
   `${prefix}/instructor/student/:id`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new UserController().getStudentById
 );
 userRouter.put(
   `${prefix}/instructor/verification/send`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   upload.fields([
     { name: "frontIdCard", maxCount: 1 },
     { name: "backIdCard", maxCount: 1 },
@@ -69,13 +69,13 @@ userRouter.put(
 userRouter.put(
   `${prefix}/instructor/verification/cancel`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new UserController().cancelRequestVerification
 );
 userRouter.put(
   `${prefix}/admin/instructor/:id`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new UserController().approvedOrRejectedInstructor
 );
 userRouter.put(
@@ -97,12 +97,12 @@ userRouter.put(
 userRouter.put(
   `${prefix}/admin/user/:id/status`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new UserController().updateStatusUser
 );
 userRouter.put(
   `${prefix}/admin/instructor/:id/info`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new UserController().updateInstructorInfo
 );

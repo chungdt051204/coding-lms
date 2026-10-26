@@ -6,7 +6,7 @@ import { middleware } from "../middlewares/middleware.js";
 testRouter.get(
   `${prefix}/instructor/tests`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new TestController().getTestsByInstructor
 );
 testRouter.get(`${prefix}/test/:id`, new TestController().getTestById);
@@ -18,24 +18,24 @@ testRouter.get(
 testRouter.post(
   `${prefix}/instructor/test/create`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new TestController().createTest
 );
 testRouter.delete(
   `${prefix}/instructor/test/:id`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new TestController().deleteTest
 );
 testRouter.put(
   `${prefix}/instructor/test/:id`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new TestController().updateTest
 );
 testRouter.put(
   `${prefix}/instructor/test/:id/status`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new TestController().activeTest
 );

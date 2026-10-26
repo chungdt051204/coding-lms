@@ -16,7 +16,7 @@ orderRouter.post(
 orderRouter.get(
   `${prefix}/admin/orders`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new OrderController().getOrders
 );
 orderRouter.get(

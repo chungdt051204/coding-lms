@@ -11,12 +11,12 @@ ratingRouter.post(
 ratingRouter.get(
   `${prefix}/admin/ratings`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new RatingController().getRatings
 );
 ratingRouter.put(
   `${prefix}/admin/rating/:id`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new RatingController().hideOrShowComment
 );

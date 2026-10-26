@@ -3,11 +3,11 @@
 @import "tailwindcss";
 
 @theme {
-  /* 1. ĐỊNH NGHĨA BASE (Để các biến gộp tham chiếu vào) */
+  /* ĐỊNH NGHĨA BASE (Để các biến gộp tham chiếu vào) */
   --font-display: "Lexend", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
 
-  /* 2. ĐỊNH NGHĨA TEXT GỘP (Kèm Size, Line-height và Font-family) */
+  /* ĐỊNH NGHĨA TEXT GỘP (Kèm Size, Line-height và Font-family) */
 
   /* DISPLAY */
   --text-display-lg: 3.5rem;
@@ -57,21 +57,21 @@
   --text-label-sm: 0.6875rem;
   --text-label-sm--line-height: 1.4;
   --text-label-sm--font-family: var(--font-body);
-  --color-surface-white: #ffffff; /* Pure White Canvas */
+  --color-surface-white: #ffffff;
 
   /* Surface System */
-  --color-surface-bg: #f2f2f2; /* App Background */
-  --color-surface-white: #ffffff; /* Pure White Canvas */
-  --color-surface-card: #f8f8f8; /* Inner Card Soft */
-  --color-surface-nav: #1a1a1a; /* Dark Navigation */
-  --color-surface-panel: #0d0d0d; /* Deep Black Variant */
+  --color-surface-bg: #f2f2f2;
+  --color-surface-white: #ffffff;
+  --color-surface-card: #f8f8f8;
+  --color-surface-nav: #1a1a1a;
+  --color-surface-panel: #0d0d0d;
 
   /* Header / nav */
   --color-nav-muted: #64748b;
   --color-header-line: #f1f5f9;
   --color-icon-muted: #94a3b8;
   --color-brand-blue: #407bff;
-  --color-brand-primary: #c8102e; /* Arena Red */
+  --color-brand-primary: #c8102e;
   --background-image-auth: linear-gradient(to right, #407bff, #c100fc);
   --color-primary-purple: #4a278c;
   --color-primary-purple-light: #6b46c1;

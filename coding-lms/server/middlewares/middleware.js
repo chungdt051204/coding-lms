@@ -20,32 +20,19 @@ export const middleware = {
         return res.status(401).json({ message: "Unauthorized" });
     }
   },
-  isAdmin: async (req, res, next) => {
-    const payload = req.payload;
-    const roleAdmin = await new RoleService().getRoleByName({
-      name: "admin",
-    });
-    const user = await userEntity.findOne({ _id: payload.sub });
-    if (user.role_id.toString() !== roleAdmin._id.toString())
-      //Đổi thành String cho dễ so sánh
-      return res.status(403).json({
-        message: "Bạn không có quyền thực hiện hành động này!",
+  checkRole: ({ role }) => {
+    return async (req, res, next) => {
+      const payload = req.payload;
+      const user = await userEntity.findOne({ _id: payload.sub });
+      const allowedRole = await new RoleService().getRoleByName({
+        name: role,
       });
-    return next();
-  },
-  isInstructor: async (req, res, next) => {
-    const payload = req.payload;
-    const roleInstructor = await new RoleService().getRoleByName({
-      name: "instructor",
-    });
-    const user = await userEntity.findOne({ _id: payload.sub });
-    if (
-      user.role_id.toString() !== roleInstructor._id.toString() &&
-      user.verified_status !== "VERIFIED"
-    )
-      return res.status(403).json({
-        message: "Bạn không có quyền thực hiện hành động này!",
-      });
-    return next();
+      if (user.role_id.toString() !== allowedRole._id.toString())
+        //Đổi thành String cho dễ so sánh
+        return res.status(403).json({
+          message: "Bạn không có quyền thực hiện hành động này!",
+        });
+      return next();
+    };
   },
 };

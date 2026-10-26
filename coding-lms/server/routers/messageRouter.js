@@ -11,6 +11,6 @@ messageRouter.post(
 messageRouter.put(
   `${prefix}/conversation/:id/messages`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new MessageController().readAllMessagesByConversation
 );

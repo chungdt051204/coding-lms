@@ -15,6 +15,6 @@ lessonRouter.get(
 lessonRouter.delete(
   `${prefix}/instructor/lesson/:id`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new LessonController().deleteLesson
 );

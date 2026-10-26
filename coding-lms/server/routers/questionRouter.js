@@ -10,6 +10,6 @@ questionRouter.get(
 questionRouter.delete(
   `${prefix}/instructor/question/:id`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new QuestionController().deleteQuestion
 );

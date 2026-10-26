@@ -110,7 +110,6 @@ export class AiService {
           .populate("user_id", "full_name")
           .populate("category_id", "category_name");
         result = courses;
-        // prompt = `Đây là kết quả tìm kiếm khóa học ${courses}. Hãy chọn lọc thông tin và liệt kê theo từng gạch đầu dòng, mỗi gạch đầu dòng đều phải xuống dòng, không sử dụng ký tự sao`;
         break;
       case "LEARNING_PROGRESS":
         const enrollments = await enrollmentEntity
@@ -122,7 +121,6 @@ export class AiService {
           )
           .populate("course_id", "course_name image_url");
         result = enrollments;
-        // prompt = `Đây là danh sách khóa học đã đăng ký và tiến độ học tập của người dùng ${enrollments}. Hãy chọn lọc thông tin và liệt kê theo từng gạch đầu dòng, mỗi gạch đầu dòng đều phải xuống dòng, không sử dụng ký tự sao. Mỗi item cách 1 dòng`;
         break;
       case "PROGRAMMING_QUESTION":
         prompt = `Đây là input của người dùng: ${input}. Hãy trình bày ngắn gọn, không sử dụng ký tự *`;

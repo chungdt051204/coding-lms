@@ -11,12 +11,12 @@ conversationRouter.get(
 conversationRouter.get(
   `${prefix}/instructor/conversations`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new ConversationController().getConversationsByInstructor
 );
 conversationRouter.get(
   `${prefix}/instructor/conversation/:id`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new ConversationController().getConversationById
 );

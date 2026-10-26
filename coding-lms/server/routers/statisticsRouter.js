@@ -6,12 +6,12 @@ const prefix = "";
 statisticsRouter.get(
   `${prefix}/instructor/statistics`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new StatisticsController().getStatisticsByInstructor
 );
 statisticsRouter.get(
   `${prefix}/admin/statistics`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new StatisticsController().getStatisticsByAdmin
 );

@@ -21,20 +21,20 @@ courseRouter.get(
 courseRouter.get(
   `${prefix}/instructor/courses`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new CourseController().getCoursesByInstructor
 );
 courseRouter.get(
   `${prefix}/admin/courses`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new CourseController().getCoursesByAdmin
 );
 courseRouter.get(`${prefix}/course/:id`, new CourseController().getCourseById);
 courseRouter.post(
   `${prefix}/instructor/course`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 },
@@ -44,7 +44,7 @@ courseRouter.post(
 courseRouter.put(
   `${prefix}/instructor/course/:id`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   upload.fields([
     { name: "image", maxCount: 1 },
     { name: "thumbnail", maxCount: 1 },
@@ -54,18 +54,18 @@ courseRouter.put(
 courseRouter.put(
   `${prefix}/instructor/course/:id/status`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new CourseController().submitOrUnSubmitCourse
 );
 courseRouter.put(
   `${prefix}/instructor/course/:id/action`,
   middleware.verifyToken,
-  middleware.isInstructor,
+  middleware.checkRole({ role: "instructor" }),
   new CourseController().deleteOrRestoreCourse
 );
 courseRouter.put(
   `${prefix}/admin/course/:id/status`,
   middleware.verifyToken,
-  middleware.isAdmin,
+  middleware.checkRole({ role: "admin" }),
   new CourseController().approveOrRejectCourse
 );
